@@ -209,6 +209,21 @@ PROMPTS = [
     {"prompt": "The original brand name for Kool-Aid.", "answer": "Fruit Smack"},
     {"prompt": "The Oxford Dictionaries' \"word of the year\" for 2013.", "answer": "Selfie"},
     {"prompt": "When Milton Bradley first acquired the rights to it, the game Twister was called this.", "answer": "Pretzel"},
+    {"prompt": "Because of his ability to stay on-air for hours, NBC newsman Lester Holt has earned the nickname ____ from his colleagues.", "answer": "Iron Pants"},
+    {"prompt": "Strangely, a 2015 study conducted by professors in Finland and California came to the conclusion that there are too many ____.", "answer": "Studies"},
+    {"prompt": "The patent shown here is for Paul R. Harriss's invention, the ____. It features a belt around a father with two straps for a child's feet.", "answer": "Dad Saddle"},
+    {"prompt": "According to Civil War historian Alfred Jay Bollet, there was an unwritten code among soldiers that they would not shoot each other while _____.", "answer": "Pooping"},
+    {"prompt": "Princess Olga of 10th Century Russia had a nasty reputation for killing anyone who suggested she ____.", "answer": "Get Married"},
+    {"prompt": "As France has begun growing more corn, they've noticed a shocking side effect: Their cornfields are full of _____.", "answer": "Cannibal Hamsters"},
+    {"prompt": "Despite it being a crime for the last 38 years, in 2014 Grand Rapids officially made it legal to _____ another's person.", "answer": "Annoy"},
+    {"prompt": "Donald Rogers wrote a book in the '50s called Teach Your Wife To Be a ____.", "answer": "Widow"},
+    {"prompt": "There's a Russian saying about needing to finish what you start. It translates to \"If you called yourself a ____, get into the basket!\"", "answer": "Mushroom"},
+    {"prompt": "Dr. Elena Bodnar invented a bra that can also be used as a ____.", "answer": "Gas Mask"},
+    {"prompt": "DSM, a company from the Netherlands, invented a new product that could help save the environment by stopping ____.", "answer": "Cow Burps"},
+    {"prompt": "The police department of the Canadian town of Kensington publicly apologized for their 2016 announcement that the new punishment for driving drunk would be _____.", "answer": "Listening To Nickelback"},
+    {"prompt": "Entrepreneur Leo De Watts has made a hefty sum selling $115 bottles of ____ to China.", "answer": "British Air"},
+    {"prompt": "In 2013, police in the Maldives detained a suspect for loitering near an election polling place on suspicion of black magic. the suspect in question was ____.", "answer": "A Coconut"},
+    {"prompt": "\"Sphenopalatine ganglioneuralgia\" may sound like a life-threatening affliction, but you've probably already had it if you've ever ____.", "answer": "Eaten Ice Cream"},
 
 ]
 
