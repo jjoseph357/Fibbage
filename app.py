@@ -63,7 +63,7 @@ PROMPTS = [
     {"prompt": "In 2013, two teens from Sequoyah High Sxhool near Atlanta, Georgia won $5,0000 scholarships for wearing _____ to prom", "answer": "Duct Tape"},
     {"prompt": "Since 2000, a couple in Queens, New York has been living rent-free in a _____ in exchange for taking care of it.", "answer": "Cemetery"},
     {"prompt": "In 2013, a 51-year-old Swedish inmate broke out of prison a day before his scheduled release so he could go see a _____.", "answer": "Dentist"},
-    {"prompt": "In 2010, Customs officers on the Morway-Sweden border intercepted a truck trying to smuggle 28 tons of _____ from China.", "answer": "Garlic"},
+    {"prompt": "In 2010, Customs officers on the Norway-Sweden border intercepted a truck trying to smuggle 28 tons of _____ from China.", "answer": "Garlic"},
     {"prompt": "In 2012, a teenager from Weslaco, Texas claimed the reason he stabbed his friend was because a _____ made him do it.", "answer": "Ouija Board"},
     {"prompt": "ROADTRIP! When on a spring break trip to Dongyang, China, be sure to try their eggs cooked in ______.", "answer": "Young Boy Urine"},
     {"prompt": "A man in Milford, Iowa got fired from his job after he used a ____ to dislodge his Twix bar from the office vending machine.", "answer": "Forklift"},
