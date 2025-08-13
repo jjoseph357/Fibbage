@@ -285,7 +285,7 @@ def generate_quiplash_prompts():
         "A name for a brand of designer adult diapers", "A not-very-scary name for a pirate", "A rejected crayon color",
         "A terrible name for a 1930s gangster", "A terrifying fortune cookie fortune", "A Tweet from a caveman", "A tourist attraction in Hell",
         "An angry review you'd give this game", "Come up with the name of a country that doesn't exist", "Fun thing to do if locked in the mall overnight",
-        "Graffiti you might find in a kindergarten", "If animals took over, an exhibit you'd see at the human zoo",
+        "Graffiti you might find in a kindergarten class", "If animals took over, an exhibit you'd see at the human zoo",
         "Name a new movie starring a talking goat who is president of the United States", "One thing never to do on a first date",
         "People would like [Fill in name] more if he/she _______", 'Really awful cheerleaders would yell "_____"!', "Something you can only do in a Walmart if no one's looking",
         "Something you probably shouldn't bring on a trip to the Sahara desert", "Something you shouldn't wear to a job interview",
