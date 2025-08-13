@@ -306,15 +306,10 @@ def generate_quiplash_prompts():
 
 QUIPLASH_PROMPTS = generate_quiplash_prompts()
 
-
 # --- Game State ---
 game_state = {
-    "prompt": "",
-    "answer": "",
-    "image": None,
-    "answers": [],
-    "stage": "waiting",
-    "game_mode": "fibbage"
+    "prompt": "", "answer": "", "image": None, "answers": [],
+    "stage": "waiting", "game_mode": "fibbage"
 }
 
 @app.route('/')

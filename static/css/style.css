@@ -2,14 +2,14 @@
 
 /* --- Root Variables for Easy Theme Management --- */
 :root {
-    --bg-color: #121222; /* Slightly darker background */
+    --bg-color: #121222;
     --primary-card-color: #1a1a2e;
     --secondary-card-color: #16213e;
     --accent-color: #e94560;
-    --accent-glow: rgba(233, 69, 96, 0.7);
+    --accent-glow: rgba(233, 69, 96, 0.5);
     --text-color: #e0e0e0;
     --correct-color: #50c878;
-    --correct-glow: rgba(80, 200, 120, 0.7);
+    --correct-glow: rgba(80, 200, 120, 0.6);
     --border-color: #0f3460;
 }
 
@@ -26,7 +26,7 @@ body {
     text-align: center;
     background: linear-gradient(-45deg, #1a1a2e, #16213e, #121222, #0f3460);
     background-size: 400% 400%;
-    animation: gradientBG 25s ease infinite;
+    animation: gradientBG 20s ease infinite;
 }
 
 #game-container, #admin-container {
@@ -41,22 +41,22 @@ h1, h2 {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 0 0 5px var(--accent-glow), 0 0 10px var(--accent-glow);
+    text-shadow: 0 0 8px var(--accent-glow);
 }
 
 .prompt {
-    font-size: clamp(1.8em, 4vw, 3em); /* Responsive font size */
-    font-weight: 900;
+    font-size: clamp(1.8em, 4vw, 3em);
+    font-weight: 700;
     margin: 30px 0;
     line-height: 1.4;
-    text-shadow: 0 0 3px #fff, 0 0 8px #fff, 0 0 15px var(--accent-glow);
+    text-shadow: 0 0 5px var(--accent-glow);
 }
 
 .waiting-text {
     font-size: 2.5em;
     font-weight: 700;
     color: var(--text-color);
-    animation: pulse 2s infinite ease-in-out;
+    animation: pulse 4s infinite ease-in-out;
 }
 
 /* --- Image Prompt Styling --- */
@@ -104,7 +104,6 @@ h1, h2 {
 .card.real-answer:hover {
     box-shadow: 0 0 35px var(--correct-glow);
 }
-
 
 /* --- Polished Admin Panel --- */
 #admin-controls {
@@ -197,8 +196,9 @@ button:active {
     to { opacity: 1; transform: scale(1); }
 }
 
+/* --- FURTHER REDUCED GLOW FOR WAITING TEXT --- */
 @keyframes pulse {
-    0% { transform: scale(1); text-shadow: 0 0 5px var(--text-color); }
-    50% { transform: scale(1.03); text-shadow: 0 0 15px var(--text-color); }
-    100% { transform: scale(1); text-shadow: 0 0 5px var(--text-color); }
+    0% { transform: scale(1); text-shadow: none; }
+    50% { transform: scale(1.075); text-shadow: 0 0 8px rgba(224, 224, 224, 0.5); }
+    100% { transform: scale(1); text-shadow: none; }
 }
