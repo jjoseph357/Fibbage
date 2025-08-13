@@ -1,13 +1,14 @@
+
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 import random
-
+import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 
 # --- Game Data (Expanded List) ---
-PROMPTS = [
+FIBBAGE_PROMPTS  = [
     {"prompt": "Donald Duck's middle name.", "answer": "Fauntleroy"},
     {"prompt": "A study published in the journal Anthrozoo reported that cows produce 5% more milk when they are given _____.", "answer": "Names"},
     {"prompt": "In 2002, Bruce Willis sent 12,000 boxes of _____ to U.S. soldiers in Afghanistan.", "answer": "Girl Scout Cookies"},
@@ -227,12 +228,93 @@ PROMPTS = [
 
 ]
 
+def generate_quiplash_prompts():
+    """Generates the full list of Quiplash prompts from templates and words."""
+
+    prompts = [
+        {"prompt": "The worst thing to find in your burrito.", "answer": None, "image": None},
+        {"prompt": "A terrible slogan for a funeral home.", "answer": None, "image": None},
+        {"prompt": "Something you shouldn't say to your mother-in-law.", "answer": None, "image": None},
+        {"prompt": "A surprising new feature for the next iPhone.", "answer": None, "image": None},
+    ]
+
+    # --- Automatic Image Prompt Generation ---
+    image_dir = './static/images'
+    # Check if the directory exists to prevent errors
+    if os.path.exists(image_dir):
+        # List all files in the directory
+        for filename in os.listdir(image_dir):
+            # Check for common image file extensions
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
+                # Create the web-accessible path for the image
+                image_path = f"/{image_dir}/{filename}"
+                # Add a prompt for this image to our list
+                prompts.append({
+                    "prompt": "Fill in the empty dialogue in the image.",
+                    "answer": None,
+                    "image": image_path
+                })
+
+    # acronyms = "A.P.C.".split()
+    acronyms = "A.P.C. H.N.G. T.F.J. R.M.C. F.G.O. P.P.P. S.W.D. G.D.W. C.A.L. U.B.M. R.D.S. W.H.F. B.O.P. N.J.C. D.Y.S. B.B.L. U.H.I. S.K.E. O.P.F. M.E.M. G.S.D. K.P.L. Q.C.B. S.H.N. D.P.D. W.A.W. J.M.T. K.L.C. R.T.O. G.O.R. L.M.N. S.S.Q. U.A.D. T.T.T. G.P.G. F.D.T. E.G.D. W.W.W. R.O.K. P.I.L. P.O.G. B.W.P. Y.O.P. P.L.P. L.I.O. R.R.O. E.K.O. C.F.F. L.D.R. S.F.F.".split()
+    for acro in acronyms:
+        prompts.append({"prompt": f"Come up with a funny meaning for the acronym: {acro}", "answer": None, "image": None})
+
+    words = "PORK MULE PANTS TAINT DUMP PUMP LICK DUCK WART NUN BEARD OINK NUT CORN BUNS TROUT BUMP CLOWN APE FLOP SCREW TUB CHEEK SCAB SQUEEZE PUKE FUDGE BREAD FORK KILL GREASE GAS ZIT WIG SQUID HONK CHUNK SQUIRT DORK TOOTH MOIST SPANK ITCH SLIME".split()
+    templates = [
+        "Come up with a new hilarious sitcom with this word in the title: {}", "Come up with a new TV show with this word in the title: {}",
+        "Come up with a hit song with this word in the title: {}", "Come up with a romantic comedy film with this word in the title: {}",
+        "Come up with a classic novel with this word in the title: {}", "Come up with a new sport with this word in its name: {}",
+        "Come up with an award-winning movie with this word in its title: {}", "Come up with a shocking newspaper headline with this word in its title: {}",
+        "Come up with a new cartoon character with this word in his name: {}", "Come up with a hot new Broadway musical with this word in its name: {}",
+        "Come up with a fast food restaurant with this word in its name: {}", "Come up with a hit new video game with this word in its title: {}",
+        "Come up with a music group with this word in their name: {}", "Come up with a clever insult using this word: {}",
+        "Come up with a flashy wrestling move with this word in its name: {}", "Come up with a new snack food with this word in its name: {}",
+        "Come up with a hot new website with this word in its name: {}",
+    ]
+    for _ in range(len(templates)):
+        template = random.choice(templates)
+        word = random.choice(words)
+        prompts.append({"prompt": template.format(word), "answer": None, "image": None})
+
+
+    static_prompts = [
+        "A bad first line for your presidential inauguration speech", "A bad thing to say to a cop as he writes you a speeding ticket",
+        "A good fake name to use when checking into a hotel", "A good sign that your house is haunted", "A good way to get fired",
+        "A great name to have on a fake I.D.", 'A great new invention that starts with "Automatic"', "A great opening line to start a conversation with a stranger at a party",
+        "A name for a brand of designer adult diapers", "A not-very-scary name for a pirate", "A rejected crayon color",
+        "A terrible name for a 1930s gangster", "A terrifying fortune cookie fortune", "A Tweet from a caveman", "A tourist attraction in Hell",
+        "An angry review you'd give this game", "Come up with the name of a country that doesn't exist", "Fun thing to do if locked in the mall overnight",
+        "Graffiti you might find in a kindergarten", "If animals took over, an exhibit you'd see at the human zoo",
+        "Name a new movie starring a talking goat who is president of the United States", "One thing never to do on a first date",
+        "People would like [Fill in name] more if he/she _______", 'Really awful cheerleaders would yell "_____"!', "Something you can only do in a Walmart if no one's looking",
+        "Something you probably shouldn't bring on a trip to the Sahara desert", "Something you shouldn't wear to a job interview",
+        "Something you'd be surprised to see a donkey do", "The best thing about living in an igloo", "The best way to start your day",
+        "The crime you would commit if you could get away with it", "The last person you'd consider inviting to your birthday party",
+        "The most awesome Guinness World Record to break", "The name of a clothing store for overweight leprechauns", "The name of a font nobody would ever use",
+        "The sound a tree actually makes when it falls and no one is around to hear it", "The worst Halloween costume for a young child",
+        "The worst name for a funeral home", "The worst name for a rap artist", "The worst name for a robot",
+        "The worst words to say for the opening of a eulogy at a funeral", "The worst words for the priest to say at a wedding",
+        "Thing you'd be most surprised to have a dentist find in your mouth", "What dogs would say if they could talk",
+        "What kittens would say if they could talk", "Where do babies come from?", "The best part about [Fill in Name]:",
+    ]
+    for p in static_prompts:
+        prompts.append({"prompt": p, "answer": None, "image": None})
+
+    return prompts
+
+
+QUIPLASH_PROMPTS = generate_quiplash_prompts()
+
+
 # --- Game State ---
 game_state = {
     "prompt": "",
     "answer": "",
+    "image": None,
     "answers": [],
-    "stage": "waiting"  # waiting -> answering -> voting
+    "stage": "waiting",
+    "game_mode": "fibbage"
 }
 
 @app.route('/')
@@ -245,29 +327,42 @@ def admin():
 
 @socketio.on('connect')
 def handle_connect():
-    # Send the current game state to a newly connected client
     emit('game_update', game_state)
 
 @socketio.on('get_random_prompt')
-def handle_get_random_prompt():
-    selected = random.choice(PROMPTS)
-    # Emit only to the admin who requested it
+def handle_get_random_prompt(data):
+    game_mode = data.get('game_mode', 'fibbage')
+    
+    if game_mode == 'quiplash':
+        selected = random.choice(QUIPLASH_PROMPTS)
+    else:
+        fibbage_prompt = random.choice(FIBBAGE_PROMPTS)
+        selected = {
+            "prompt": fibbage_prompt["prompt"],
+            "answer": fibbage_prompt["answer"],
+            "image": None
+        }
     emit('random_prompt_data', selected, room=request.sid)
 
 @socketio.on('start_game')
 def handle_start_game(data):
     game_state['prompt'] = data.get('prompt')
     game_state['answer'] = data.get('answer')
+    game_state['image'] = data.get('image')
     game_state['stage'] = 'answering'
     game_state['answers'] = []
+    game_state['game_mode'] = data.get('game_mode', 'fibbage')
     socketio.emit('game_update', game_state)
 
 @socketio.on('submit_answers')
 def handle_submit_answers(data):
     player_answers = data.get('player_answers', [])
     
-    # Add the real answer to the list of player answers
-    all_answers = player_answers + [game_state['answer']]
+    if game_state['game_mode'] == 'fibbage' and game_state.get('answer'):
+        all_answers = player_answers + [game_state['answer']]
+    else:
+        all_answers = player_answers
+        
     random.shuffle(all_answers)
     
     game_state['answers'] = all_answers
@@ -279,9 +374,9 @@ def handle_new_round():
     game_state['stage'] = 'waiting'
     game_state['prompt'] = ''
     game_state['answer'] = ''
+    game_state['image'] = None
     game_state['answers'] = []
     socketio.emit('game_update', game_state)
 
 if __name__ == '__main__':
-    # Use 0.0.0.0 to make the server accessible on your local network
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)

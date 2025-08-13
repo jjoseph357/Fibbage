@@ -14,27 +14,33 @@ document.addEventListener('DOMContentLoaded', () => {
             waitingText.className = 'waiting-text';
             waitingText.textContent = 'Waiting for the next round...';
             gameContainer.appendChild(waitingText);
-        } else if (state.stage === 'answering') {
-            const promptText = document.createElement('h2');
-            promptText.className = 'prompt';
-            promptText.textContent = state.prompt;
-            gameContainer.appendChild(promptText);
-        } else if (state.stage === 'voting') {
+
+        } else if (state.stage === 'answering' || state.stage === 'voting') {
+            // Display image if one exists for this round
+            if (state.image) {
+                const imageEl = document.createElement('img');
+                imageEl.src = state.image;
+                imageEl.className = 'prompt-image';
+                gameContainer.appendChild(imageEl);
+            }
+
             const promptText = document.createElement('h2');
             promptText.className = 'prompt';
             promptText.textContent = state.prompt;
             gameContainer.appendChild(promptText);
 
-            const votingGrid = document.createElement('div');
-            votingGrid.className = 'voting-grid';
+            if (state.stage === 'voting') {
+                const votingGrid = document.createElement('div');
+                votingGrid.className = 'voting-grid';
 
-            state.answers.forEach((answer, index) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `<span class="card-number">${index + 1}.</span> ${answer}`;
-                votingGrid.appendChild(card);
-            });
-            gameContainer.appendChild(votingGrid);
+                state.answers.forEach((answer, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `<span class="card-number">${index + 1}.</span> ${answer}`;
+                    votingGrid.appendChild(card);
+                });
+                gameContainer.appendChild(votingGrid);
+            }
         }
     }
 });
