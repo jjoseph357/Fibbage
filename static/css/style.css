@@ -202,3 +202,88 @@ button:active {
     50% { transform: scale(1.075); text-shadow: 0 0 8px rgba(224, 224, 224, 0.5); }
     100% { transform: scale(1); text-shadow: none; }
 }
+
+/* --- NEW STYLES FOR FIBBAGE REVEAL ANIMATION --- */
+
+.reveal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.reveal-question {
+    font-size: 1.5em;
+    font-weight: 400;
+    color: var(--text-color);
+    margin: 10px 0;
+}
+
+.reveal-prompt {
+    font-size: clamp(2.5em, 5vw, 4em);
+    font-weight: 900;
+    margin: 20px;
+    padding: 10px 20px;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.reveal-main-prompt {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #ccc;
+    margin-top: 30px;
+}
+
+.reveal-result-text {
+    font-size: 6em;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-top: 40px;
+    animation: fadeInScaleUp 0.5s ease-out;
+}
+
+/* The class that triggers the flicker animation */
+.is-flickering {
+    animation: flicker-glow 0.2s infinite;
+}
+
+/* Final state classes */
+.reveal-final-real {
+    color: var(--correct-color);
+    text-shadow: 0 0 20px var(--correct-glow);
+    border-color: var(--correct-color);
+}
+
+.reveal-final-fake {
+    color: var(--accent-color);
+    text-shadow: 0 0 20px var(--accent-glow);
+    border-color: var(--accent-color);
+}
+
+/* Animation for flickering between red and green */
+@keyframes flicker-glow {
+    0% {
+        color: var(--accent-color);
+        text-shadow: 0 0 15px var(--accent-glow);
+        border-color: var(--accent-color);
+    }
+    49% {
+        color: var(--accent-color);
+        text-shadow: 0 0 15px var(--accent-glow);
+        border-color: var(--accent-color);
+    }
+    50% {
+        color: var(--correct-color);
+        text-shadow: 0 0 15px var(--correct-glow);
+        border-color: var(--correct-color);
+    }
+    100% {
+        color: var(--correct-color);
+        text-shadow: 0 0 15px var(--correct-glow);
+        border-color: var(--correct-color);
+    }
+}
