@@ -306,18 +306,19 @@ def generate_quiplash_prompts():
 
 QUIPLASH_PROMPTS = generate_quiplash_prompts()
 
-# --- Game State ---
+# --- Game State (with new revealed_answers list) ---
 game_state = {
     "prompt": "",
     "answer": "",
     "image": None,
     "answers": [],
-    "stage": "waiting",  # waiting -> answering -> voting -> revealing
+    "revealed_answers": [], # NEW: Tracks answers shown to viewers
+    "stage": "waiting",
     "game_mode": "fibbage",
-    "last_revealed": {} # To hold info about the revealed answer
+    "last_revealed": {}
 }
 
-# --- (Your route handlers and existing socket handlers remain here) ---
+# --- Route Handlers ---
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -326,13 +327,12 @@ def index():
 def admin():
     return render_template('admin.html')
 
-
+# --- SocketIO Handlers ---
 @socketio.on('connect')
 def handle_connect():
     emit('game_update', game_state)
 
 @socketio.on('get_random_prompt')
-# ... (this function remains unchanged)
 def handle_get_random_prompt(data):
     game_mode = data.get('game_mode', 'fibbage')
     if game_mode == 'quiplash':
@@ -342,21 +342,18 @@ def handle_get_random_prompt(data):
         selected = {"prompt": fibbage_prompt["prompt"], "answer": fibbage_prompt["answer"], "image": None}
     emit('random_prompt_data', selected, room=request.sid)
 
-
 @socketio.on('start_game')
-# ... (this function remains unchanged)
 def handle_start_game(data):
     game_state['prompt'] = data.get('prompt')
     game_state['answer'] = data.get('answer')
     game_state['image'] = data.get('image')
     game_state['stage'] = 'answering'
     game_state['answers'] = []
+    game_state['revealed_answers'] = [] # Reset on start
     game_state['game_mode'] = data.get('game_mode', 'fibbage')
     socketio.emit('game_update', game_state)
 
-
 @socketio.on('submit_answers')
-# ... (this function remains unchanged)
 def handle_submit_answers(data):
     player_answers = data.get('player_answers', [])
     if game_state['game_mode'] == 'fibbage' and game_state.get('answer'):
@@ -365,43 +362,46 @@ def handle_submit_answers(data):
         all_answers = player_answers
     random.shuffle(all_answers)
     game_state['answers'] = all_answers
+    game_state['revealed_answers'] = [] # Initialize as empty
     game_state['stage'] = 'voting'
     socketio.emit('game_update', game_state)
 
-# --- NEW SOCKET HANDLER FOR THE REVEAL ---
+# --- NEW: HANDLER TO REVEAL A SINGLE ANSWER TO VIEWERS ---
+@socketio.on('reveal_one_answer')
+def handle_reveal_one_answer(data):
+    """
+    Adds one answer to the list of revealed answers.
+    """
+    if game_state['stage'] == 'voting':
+        answer_to_reveal = data.get('answer_text')
+        # Add the answer if it exists and hasn't been revealed yet
+        if answer_to_reveal in game_state['answers'] and answer_to_reveal not in game_state['revealed_answers']:
+            game_state['revealed_answers'].append(answer_to_reveal)
+            socketio.emit('game_update', game_state)
+
+# --- (Fibbage REAL/FAKE animation handler remains the same) ---
 @socketio.on('reveal_answer')
 def handle_reveal_answer(data):
     if game_state['stage'] == 'voting' and game_state['game_mode'] == 'fibbage':
         clicked_answer = data.get('answer_text')
         real_answer = game_state.get('answer')
         is_real = (clicked_answer == real_answer)
-
-        # Update server state to the new "revealing" stage
+        
         game_state['stage'] = 'revealing'
-        game_state['last_revealed'] = {
-            'answer': clicked_answer,
-            'is_real': is_real
-        }
-
-        # Tell players to show the animation
+        game_state['last_revealed'] = {'answer': clicked_answer, 'is_real': is_real}
+        
         socketio.emit('show_reveal_animation', {
             'prompt': game_state['prompt'],
             'clicked_answer': clicked_answer,
             'is_real': is_real
         })
-        # Tell admin to update their view to the reveal summary screen
         socketio.emit('game_update', game_state)
 
-
-# --- NEW: HANDLER TO RETURN TO VOTING ---
 @socketio.on('back_to_voting')
 def handle_back_to_voting():
-    """
-    Sets the game stage back to 'voting' after a reveal.
-    """
     if game_state['stage'] == 'revealing':
         game_state['stage'] = 'voting'
-        game_state['last_revealed'] = {} # Clear the revealed data
+        game_state['last_revealed'] = {}
         socketio.emit('game_update', game_state)
 
 @socketio.on('new_round')
@@ -411,6 +411,8 @@ def handle_new_round():
     game_state['answer'] = ''
     game_state['image'] = None
     game_state['answers'] = []
+    game_state['revealed_answers'] = [] # Reset on new round
+    game_state['last_revealed'] = {}
     socketio.emit('game_update', game_state)
 
 if __name__ == '__main__':

@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('random_prompt_data', (data) => {
-        // ... (this function remains unchanged)
         currentPromptData = data;
         const promptInput = document.getElementById('prompt-input');
         const answerInput = document.getElementById('answer-input');
@@ -19,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             promptInput.value = data.prompt;
             answerInput.value = data.answer || '';
         }
-        if(imagePreview) {
+        if (imagePreview) {
             if (data.image) {
                 imagePreview.src = data.image;
                 imagePreview.style.display = 'block';
@@ -31,26 +30,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateAdminView() {
         adminControls.innerHTML = '';
-
         if (gameState.stage === 'waiting') {
             renderStartPhase();
         } else if (gameState.stage === 'answering') {
             renderAnsweringPhase();
         } else if (gameState.stage === 'voting') {
             renderVotingPhase();
-        } else if (gameState.stage === 'revealing') { // Check for the new stage
+        } else if (gameState.stage === 'revealing') {
             renderRevealingPhase();
         }
     }
 
-    // --- NEW: RENDER FUNCTION FOR THE ADMIN'S REVEAL SCREEN ---
     function renderRevealingPhase() {
         const section = document.createElement('div');
         section.className = 'admin-section';
         const revealed = gameState.last_revealed;
         const resultText = revealed.is_real ? 'REAL' : 'FAKE';
         const resultClass = revealed.is_real ? 'reveal-final-real' : 'reveal-final-fake';
-
         section.innerHTML = `
             <h2>Answer Revealed</h2>
             <p>The answer chosen was:</p>
@@ -59,14 +55,76 @@ document.addEventListener('DOMContentLoaded', () => {
             <button id="back-to-voting-btn">Back to Answers</button>
         `;
         adminControls.appendChild(section);
-
         document.getElementById('back-to-voting-btn').addEventListener('click', () => {
             socket.emit('back_to_voting');
         });
     }
 
+    // --- COMPLETELY REBUILT VOTING PHASE FOR INTUITIVE CONTROLS ---
+    function renderVotingPhase() {
+        const section = document.createElement('div');
+        section.className = 'admin-section';
+        const isFibbage = gameState.game_mode === 'fibbage';
+        let answersHtml = `<h2>Reveal Answers to Players</h2><div class="answer-list">`;
+
+        gameState.answers.forEach((answer, index) => {
+            const isRealAnswer = isFibbage && answer === gameState.answer;
+            const isRevealedToPlayers = gameState.revealed_answers.includes(answer);
+            
+            let cardClasses = 'card';
+            if (isRevealedToPlayers) cardClasses += ' revealed';
+            if (isRealAnswer) cardClasses += ' real-answer';
+
+            // Determine which buttons to show
+            let controlsHtml = '';
+            if (!isRevealedToPlayers) {
+                // If not revealed, show the button to reveal it
+                controlsHtml = `<button class="reveal-one-btn" data-answer="${answer.replace(/"/g, '&quot;')}">Reveal to Players</button>`;
+            } else if (isFibbage) {
+                // If it IS revealed AND it's Fibbage, show the REAL/FAKE button
+                controlsHtml = `<button class="fibbage-reveal-btn" data-answer="${answer.replace(/"/g, '&quot;')}">REAL/FAKE?</button>`;
+            }
+
+            answersHtml += `
+                <div class="${cardClasses}">
+                    <span>${index + 1}. ${answer}</span>
+                    <div class="card-controls">
+                        ${controlsHtml}
+                    </div>
+                </div>`;
+        });
+
+        answersHtml += `</div><button id="new-round-btn">Start New Round</button>`;
+        section.innerHTML = answersHtml;
+        adminControls.appendChild(section);
+
+        // Add event listener for the "Reveal to Players" buttons
+        adminControls.querySelectorAll('.reveal-one-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const answerText = e.currentTarget.dataset.answer;
+                socket.emit('reveal_one_answer', { answer_text: answerText });
+            });
+        });
+
+        // Add event listener for the "REAL/FAKE?" buttons
+        if (isFibbage) {
+            adminControls.querySelectorAll('.fibbage-reveal-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const answerText = e.currentTarget.dataset.answer;
+                    socket.emit('reveal_answer', { answer_text: answerText });
+                });
+            });
+        }
+
+        document.getElementById('new-round-btn').addEventListener('click', () => {
+            socket.emit('new_round');
+        });
+    }
+
+    // --- (All other admin.js functions remain the same) ---
     function renderStartPhase() {
-        // ... (this function remains unchanged)
         const section = document.createElement('div');
         section.className = 'admin-section';
         const isQuiplash = gameState.game_mode === 'quiplash';
@@ -116,9 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
     function renderAnsweringPhase() {
-        // ... (this function remains unchanged)
         const section = document.createElement('div');
         section.className = 'admin-section';
         const isQuiplash = gameState.game_mode === 'quiplash';
@@ -138,50 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('add-answer-btn').addEventListener('click', addPlayerAnswerInput);
         document.getElementById('start-voting-btn').addEventListener('click', submitPlayerAnswers);
     }
-
-    function renderVotingPhase() {
-        // ... (this function remains unchanged)
-        const section = document.createElement('div');
-        section.className = 'admin-section';
-        const isFibbage = gameState.game_mode === 'fibbage';
-        let answersHtml = `<h2>Click an answer to reveal it</h2><div class="answer-list">`;
-        gameState.answers.forEach((answer, index) => {
-            const isReal = isFibbage && answer === gameState.answer;
-            const clickableClass = isFibbage ? 'reveal-trigger' : '';
-            const dataAttribute = isFibbage ? `data-answer="${answer.replace(/"/g, '&quot;')}"` : '';
-            answersHtml += `
-                <div class="card ${isReal ? 'real-answer' : ''} ${clickableClass}" ${dataAttribute}>
-                    <span>${index + 1}. ${answer}</span>
-                    ${isReal ? '<strong>(REAL ANSWER)</strong>' : ''}
-                </div>`;
-        });
-        answersHtml += `</div><button id="new-round-btn">Start New Round</button>`;
-        section.innerHTML = answersHtml;
-        adminControls.appendChild(section);
-        if (isFibbage) {
-            document.querySelectorAll('.reveal-trigger').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    const answerText = e.currentTarget.dataset.answer;
-                    socket.emit('reveal_answer', { answer_text: answerText });
-                });
-            });
-        }
-        document.getElementById('new-round-btn').addEventListener('click', () => {
-            socket.emit('new_round');
-        });
-    }
-
     function addPlayerAnswerInput() {
-        // ... (this function remains unchanged)
         const container = document.getElementById('player-answers-container');
         const newInput = document.createElement('div');
         newInput.className = 'player-answers-input';
         newInput.innerHTML = `<input type="text" class="player-answer-input">`;
         container.appendChild(newInput);
     }
-
     function submitPlayerAnswers() {
-        // ... (this function remains unchanged)
         const inputs = document.querySelectorAll('.player-answer-input');
         const playerAnswers = Array.from(inputs).map(input => input.value.trim()).filter(value => value !== '');
         socket.emit('submit_answers', { player_answers: playerAnswers });

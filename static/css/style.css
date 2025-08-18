@@ -287,3 +287,80 @@ button:active {
         border-color: var(--correct-color);
     }
 }
+/* Style for cards on the admin panel that have been revealed */
+.admin-section .card.revealed {
+    background: #0f3460;
+    opacity: 0.6;
+    cursor: default;
+    transform: none; /* Disable hover effect */
+}
+
+.admin-section .card.revealed:hover {
+    border-color: var(--border-color); /* Disable hover effect */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Disable hover effect */
+}
+
+/* Style for the button that triggers the REAL/FAKE animation in Fibbage */
+.fibbage-reveal-btn {
+    background: var(--correct-color);
+    box-shadow: 0 0 10px var(--correct-glow);
+    padding: 8px 15px;
+    font-size: 0.8em;
+    margin-left: 15px;
+}
+
+.fibbage-reveal-btn:hover {
+    background: #3ca561;
+}
+
+/* Animation for cards appearing on the viewer's screen */
+.revealed-card {
+    animation: fadeInScaleUp 0.6s ease-out;
+}
+/* Creates a container for buttons inside the admin cards */
+.card-controls {
+    margin-left: 20px;
+    flex-shrink: 0; /* Prevents buttons from shrinking */
+}
+
+/* Style for the button that reveals an answer to players */
+.reveal-one-btn {
+    background: #4a90e2; /* A nice blue color */
+    padding: 8px 15px;
+    font-size: 0.8em;
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.6);
+}
+
+.reveal-one-btn:hover {
+    background: #357ABD;
+}
+
+
+/* --- (The rest of your CSS remains the same) --- */
+.admin-section .card.revealed {
+    background: #0f3460;
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+}
+
+.admin-section .card.revealed:hover {
+    border-color: var(--border-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.fibbage-reveal-btn {
+    background: var(--correct-color);
+    box-shadow: 0 0 10px var(--correct-glow);
+    padding: 8px 15px;
+    font-size: 0.8em;
+    margin-left: 15px;
+}
+
+.fibbage-reveal-btn:hover {
+    background: #3ca561;
+}
+
+.revealed-card {
+    animation: fadeInScaleUp 0.6s ease-out;
+}
