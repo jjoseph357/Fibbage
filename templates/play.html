@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Party Controller</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="controller-wrapper">
+        <!-- Virtual Multi-Player Switcher Bar (Tabs for 1 or more local players) -->
+        <nav class="multi-player-bar" id="multi-player-bar">
+            <div class="switcher-tabs-scroll" id="player-tabs-container">
+                <!-- Dynamic Player Tabs: [ 👤 Alice 🟢 ] [ 👤 Bob 🟡 ] [ + Add Player ] -->
+            </div>
+        </nav>
+
+        <!-- Main Dynamic Controller Content -->
+        <main class="controller-card" id="player-stage">
+            <!-- Dynamic Content loaded by player.js (Join, Answering, Voting, Waiting, Results) -->
+            <div style="padding: 40px 20px;">
+                <h2>Connecting to Party...</h2>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/socket.io.min.js"></script>
+    <script src="/static/js/audio.js"></script>
+    <script src="/static/js/player.js"></script>
+</body>
+</html>

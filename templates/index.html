@@ -2,17 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Party Games Hub</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <div id="game-container">
-        <h1>Fibbage / Quiplash</h1>
-        <h2 class="waiting-text">Connecting to the game...</h2>
-    </div>
+    <div class="landing-wrapper">
+        <header>
+            <h1 class="hero-title">🎮 PARTY GAMES HUB</h1>
+            <p class="hero-subtitle">Premium local multiplayer parlor experience for laptops, TVs & mobile phones</p>
+        </header>
 
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-    <script src="/static/js/main.js"></script>
+        <div class="role-grid">
+            <a href="/host" class="role-card" id="host-card-link">
+                <div class="role-icon">📺</div>
+                <h2>Host Big Screen</h2>
+                <p>Run the main lobby, big-screen TV prompts, timers, and scoreboards on this laptop or external monitor.</p>
+                <span class="btn btn-primary">Open Host Screen ➔</span>
+            </a>
+
+            <a href="/play" class="role-card" id="play-card-link">
+                <div class="role-icon">📱</div>
+                <h2>Player Controller</h2>
+                <p>Join as a single phone player, or use the <strong>Virtual Multi-Player Switcher</strong> to play multiple users on one laptop window!</p>
+                <span class="btn btn-secondary">Open Controller ➔</span>
+            </a>
+        </div>
+
+        <div class="guide-panel">
+            <h3>📶 Easy Hotspot Setup Guide (No Wi-Fi Router Needed)</h3>
+            <ol>
+                <li>On this laptop, press <strong>Windows Key + I</strong> &rarr; go to <strong>Network & Internet</strong> &rarr; toggle on <strong>Mobile Hotspot</strong>.</li>
+                <li>Have friends connect their phones to your laptop's hotspot Wi-Fi network.</li>
+                <li>Open <strong>Host Big Screen</strong> on your laptop and have players scan the big on-screen <strong>QR Code</strong> with their phone cameras!</li>
+                <li><em>No phone?</em> Open a second browser window at <strong>/play</strong> and click <strong>+ Add Player</strong> to switch between multiple players seamlessly!</li>
+            </ol>
+        </div>
+    </div>
 </body>
 </html>

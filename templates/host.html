@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Party Games Hub - Host Screen</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Host Big-Screen Navigation Bar -->
+    <header class="host-nav">
+        <div class="host-brand" id="host-brand-btn">
+            <span>🎮</span>
+            <span>PARTY GAMES HUB</span>
+        </div>
+
+        <div class="host-info-bar">
+            <div class="join-info-box">
+                <div>
+                    <div class="join-code-label">Room Code</div>
+                    <div class="join-code-val" id="nav-room-code">GAME</div>
+                </div>
+                <div>
+                    <div class="join-code-label">Join On Phone</div>
+                    <div class="join-url-val" id="nav-join-url">Detecting IP...</div>
+                </div>
+            </div>
+
+            <div class="host-controls-group">
+                <button class="btn btn-outline btn-sm" id="mute-toggle-btn" title="Toggle Sound FX">🔊 SFX: ON</button>
+                <button class="btn btn-outline btn-sm" id="restart-session-btn" title="Reset question and prompt history for all games">🔄 Reset History</button>
+                <button class="btn btn-outline btn-sm" id="return-hub-btn" style="display: none;">🎮 Games Hub</button>
+                <button class="btn btn-secondary btn-sm" id="host-force-next-btn" style="display: none;">⏩ Skip / Next</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Host Screen -->
+    <main class="host-main-container" id="host-stage">
+        <!-- Rendered dynamically by host.js (Hub, Lobby, Game Stage, Podium) -->
+        <div style="text-align: center; padding: 60px;">
+            <h2>Connecting to Game Server...</h2>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="/static/js/socket.io.min.js"></script>
+    <script src="/static/js/qrcode.min.js"></script>
+    <script src="/static/js/audio.js"></script>
+    <script src="/static/js/confetti.js"></script>
+    <script src="/static/js/host.js"></script>
+</body>
+</html>
